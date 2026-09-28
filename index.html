@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>EduGenie AI</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+    <header>
+        <h1>🎓 EduGenie AI</h1>
+        <p>Your AI Powered Learning Assistant</p>
+    </header>
+
+    <main>
+
+        <!-- Explanation -->
+        <section class="card">
+            <h2>📚 Explain a Topic</h2>
+
+            <input
+                type="text"
+                id="explainTopic"
+                placeholder="Enter a topic"
+            >
+
+            <button onclick="explainTopic()">
+                Explain
+            </button>
+
+            <div id="explainResult" class="result"></div>
+        </section>
+
+
+        <!-- Learning Path -->
+        <section class="card">
+            <h2>🛣️ Learning Path</h2>
+
+            <input
+                type="text"
+                id="learnTopic"
+                placeholder="Enter a topic"
+            >
+
+            <button onclick="createLearningPath()">
+                Create Path
+            </button>
+
+            <div id="learnResult" class="result"></div>
+        </section>
+
+
+        <!-- Q&A -->
+        <section class="card">
+            <h2>❓ Ask EduGenie</h2>
+
+            <textarea
+                id="question"
+                placeholder="Ask your question..."
+            ></textarea>
+
+            <button onclick="askQuestion()">
+                Ask
+            </button>
+
+            <div id="qnaResult" class="result"></div>
+        </section>
+
+
+        <!-- Quiz -->
+        <section class="card">
+            <h2>📝 Generate Quiz</h2>
+
+            <input
+                type="text"
+                id="quizTopic"
+                placeholder="Enter a topic"
+            >
+
+            <button onclick="generateQuiz()">
+                Generate Quiz
+            </button>
+
+            <div id="quizResult" class="result"></div>
+        </section>
+
+
+        <!-- Summary -->
+        <section class="card">
+            <h2>📖 Text Summarizer</h2>
+
+            <textarea
+                id="summaryText"
+                placeholder="Paste your study material here..."
+            ></textarea>
+
+            <button onclick="summarizeText()">
+                Summarize
+            </button>
+
+            <div id="summaryResult" class="result"></div>
+        </section>
+
+    </main>
+
+
+    <script>
+
+        async function explainTopic() {
+
+            const topic =
+                document.getElementById("explainTopic").value;
+
+            const result =
+                document.getElementById("explainResult");
+
+            result.innerHTML = "⏳ Generating explanation...";
+
+            const response = await fetch("/explain", {
+                method: "POST",
+
+                headers: {
+                    "Content-Type": "application/json"
+                },
+
+                body: JSON.stringify({
+                    topic: topic
+                })
+            });
+
+            const data = await response.json();
+
+            result.innerHTML =
+                formatText(data.result);
+        }
+
+
+        async function createLearningPath() {
+
+            const topic =
+                document.getElementById("learnTopic").value;
+
+            const result =
+                document.getElementById("learnResult");
+
+            result.innerHTML =
+                "⏳ Creating learning path...";
+
+            const response = await fetch("/learn", {
+                method: "POST",
+
+                headers: {
+                    "Content-Type": "application/json"
+                },
+
+                body: JSON.stringify({
+                    topic: topic
+                })
+            });
+
+            const data = await response.json();
+
+            result.innerHTML =
+                formatText(data.result);
+        }
+
+
+        async function askQuestion() {
+
+            const question =
+                document.getElementById("question").value;
+
+            const result =
+                document.getElementById("qnaResult");
+
+            result.innerHTML =
+                "⏳ Thinking...";
+
+            const response = await fetch("/qna", {
+                method: "POST",
+
+                headers: {
+                    "Content-Type": "application/json"
+                },
+
+                body: JSON.stringify({
+                    question: question
+                })
+            });
+
+            const data = await response.json();
+
+            result.innerHTML =
+                formatText(data.result);
+        }
+
+
+        async function generateQuiz() {
+
+            const topic =
+                document.getElementById("quizTopic").value;
+
+            const result =
+                document.getElementById("quizResult");
+
+            result.innerHTML =
+                "⏳ Creating quiz...";
+
+            const response = await fetch("/quiz", {
+                method: "POST",
+
+                headers: {
+                    "Content-Type": "application/json"
+                },
+
+                body: JSON.stringify({
+                    topic: topic
+                })
+            });
+
+            const data = await response.json();
+
+            result.innerHTML =
+                formatText(data.result);
+        }
+
+
+        async function summarizeText() {
+
+            const text =
+                document.getElementById("summaryText").value;
+
+            const result =
+                document.getElementById("summaryResult");
+
+            result.innerHTML =
+                "⏳ Summarizing...";
+
+            const response = await fetch("/summary", {
+                method: "POST",
+
+                headers: {
+                    "Content-Type": "application/json"
+                },
+
+                body: JSON.stringify({
+                    text: text
+                })
+            });
+
+            const data = await response.json();
+
+            result.innerHTML =
+                formatText(data.result);
+        }
+
+
+        function formatText(text) {
+
+            return text
+                .replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>")
+                .replace(/\n/g, "<br>");
+
+        }
+
+    </script>
+
+</body>
+
+</html>
