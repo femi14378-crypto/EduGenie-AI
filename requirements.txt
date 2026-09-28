@@ -1,0 +1,9 @@
+Flask
+requests
+python-dotenv
+fastapi
+uvicorn[standard]
+jinja2
+pydantic
+python-dotenv
+requests
